@@ -24,3 +24,23 @@ chapterContainer.innerHTML = `
                     <p><strong>Summary:</strong> ${chapter.summary.en}</p>
                 </div>
             `;
+
+
+try {
+                // Fetch verse data
+                const response = await fetch(`https://vedicscriptures.github.io/slok/${chapter}/${verse}`);
+                if (!response.ok) {
+                    throw new Error("Verse not found");
+                }
+                const data = await response.json();
+
+                // Clean and display the verse
+                const verseContainer = document.getElementById("verseContainer");
+                const cleanEnglishTranslation = data.siva.et.replace(/[0-9\.]+/g, "").replace(/\s{2,}/g, " ");
+                verseContainer.innerHTML = `
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h2 class="card-title">Chapter ${chapter}, Verse ${verse}</h2>
+                            <p class="card-text">${cleanEnglishTranslation}</p>
+                        </div>
+                    </div>`;
